@@ -26,13 +26,16 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - uses: actions/checkout@v2
-    - uses: borales/actions-yarn@v1.22.10
-      with:
-        cmd: install # will run `yarn install` command
-    - uses: borales/actions-yarn@v1.22.10
-      with:
-        cmd: build # will run `yarn build` command
-    - uses: borales/actions-yarn@v1.22.10
-      with:
-        cmd: test # will run `yarn test` command
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: install dependencies
+        run: yarn --frozen-lockfile
+      - name: build
+        run: yarn build
+      - name: tests
+        run: yarn test
